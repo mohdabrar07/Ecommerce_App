@@ -31,9 +31,40 @@ class AuthCubit extends Cubit<AuthState>{
       emit(AuthSuccess());
     }catch(e){
       emit(AuthError(
-        e.toString(),
+         "Invalid email or password",
       ),
       );
     }
     }
+    Future<void> getProfile() async {
+
+  try {
+
+    emit(AuthLoading());
+
+    final box =
+        await Hive.openBox('appBox');
+
+    final token =
+        box.get('token');
+
+    final user =
+        await authApiService
+            .getProfile(token);
+
+    emit(
+      ProfileLoaded(user),
+    );
+
+  } catch (e) {
+
+    emit(
+      AuthError(
+        "Failed to load profile",
+      ),
+    );
+
+  }
+
+}
   }

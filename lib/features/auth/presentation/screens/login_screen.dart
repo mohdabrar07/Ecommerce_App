@@ -29,190 +29,189 @@ class _LoginScreenState
   @override
   Widget build(BuildContext context) {
 
-    return BlocProvider(
+    return Scaffold(
 
-      create: (_) => AuthCubit(),
+    appBar: AppBar(
+      title: const Text("Login"),
+    ),
 
-      child: Scaffold(
+    body: Padding(
 
-        appBar: AppBar(
-          title: const Text("Login"),
-        ),
+      padding: const EdgeInsets.all(16),
 
-        body: BlocConsumer<AuthCubit, AuthState>(
+      child: BlocConsumer<AuthCubit, AuthState>(
 
-          listener: (context, state) {
+        listener: (context, state) {
 
-            if(state is AuthSuccess) {
+          if(state is AuthSuccess) {
 
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (_) =>
-                      const HomeScreen(),
-                ),
-              );
+            Navigator.pushReplacement(
 
-            }
+              context,
 
-            if(state is AuthError) {
-
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(
-
-                SnackBar(
-                  content: Text(state.message),
-                ),
-
-              );
-
-            }
-
-          },
-
-          builder: (context, state) {
-
-            return Padding(
-
-              padding: const EdgeInsets.all(16),
-
-              child: Form(
-
-                key: formKey,
-
-                child: Column(
-
-                  children: [
-
-                    TextFormField(
-
-                      controller: emailController,
-
-                      decoration: const InputDecoration(
-                        labelText: "Email",
-                      ),
-
-                      validator: (value) {
-
-                        if(value == null ||
-                            value.isEmpty) {
-
-                          return "Enter email";
-
-                        }
-
-                        return null;
-
-                      },
-
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    TextFormField(
-
-                      controller:
-                          passwordController,
-
-                      obscureText:
-                          obscurePassword,
-
-                      decoration: InputDecoration(
-
-                        labelText: "Password",
-
-                        suffixIcon: IconButton(
-
-                          onPressed: () {
-
-                            setState(() {
-
-                              obscurePassword =
-                                  !obscurePassword;
-
-                            });
-
-                          },
-
-                          icon: Icon(
-
-                            obscurePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-
-                          ),
-
-                        ),
-
-                      ),
-
-                      validator: (value) {
-
-                        if(value == null ||
-                            value.isEmpty) {
-
-                          return
-                              "Enter password";
-
-                        }
-
-                        return null;
-
-                      },
-
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    state is AuthLoading
-
-                        ? const CircularProgressIndicator()
-
-                        : ElevatedButton(
-
-                            onPressed: () {
-
-                              if(formKey
-                                  .currentState!
-                                  .validate()) {
-
-                                context
-                                    .read<AuthCubit>()
-                                    .login(
-
-                                  email:
-                                      emailController.text,
-
-                                  password:
-                                      passwordController.text,
-
-                                );
-
-                              }
-
-                            },
-
-                            child:
-                                const Text("Login"),
-
-                          ),
-
-                  ],
-
-                ),
-
+              MaterialPageRoute(
+                builder: (_) =>
+                    const HomeScreen(),
               ),
 
             );
 
-          },
+          }
 
-        ),
+          if(state is AuthError) {
+
+            ScaffoldMessenger.of(context)
+                .showSnackBar(
+
+              SnackBar(
+                content:
+                    Text(state.message),
+              ),
+
+            );
+
+          }
+
+        },
+
+        builder: (context, state) {
+
+          return Form(
+
+            key: formKey,
+
+            child: Column(
+
+              children: [
+
+                TextFormField(
+
+                  controller: emailController,
+
+                  decoration: const InputDecoration(
+                    labelText: "Email",
+                  ),
+
+                  validator: (value) {
+
+                    if(value == null ||
+                        value.isEmpty) {
+
+                      return "Enter email";
+
+                    }
+
+                    return null;
+
+                  },
+
+                ),
+
+                const SizedBox(height: 20),
+
+                TextFormField(
+
+                  controller:
+                      passwordController,
+
+                  obscureText:
+                      obscurePassword,
+
+                  decoration: InputDecoration(
+
+                    labelText: "Password",
+
+                    suffixIcon: IconButton(
+
+                      onPressed: () {
+
+                        setState(() {
+
+                          obscurePassword =
+                              !obscurePassword;
+
+                        });
+
+                      },
+
+                      icon: Icon(
+
+                        obscurePassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+
+                      ),
+
+                    ),
+
+                  ),
+
+                  validator: (value) {
+
+                    if(value == null ||
+                        value.isEmpty) {
+
+                      return "Enter password";
+
+                    }
+
+                    return null;
+
+                  },
+
+                ),
+
+                const SizedBox(height: 30),
+
+                state is AuthLoading
+
+                    ? const CircularProgressIndicator()
+
+                    : ElevatedButton(
+
+                        onPressed: () {
+
+                          if(formKey
+                              .currentState!
+                              .validate()) {
+
+                            context
+                                .read<AuthCubit>()
+                                .login(
+
+                              email:
+                                  emailController.text,
+
+                              password:
+                                  passwordController.text,
+
+                            );
+
+                          }
+
+                        },
+
+                        child: const Text(
+                          "Login",
+                        ),
+
+                      ),
+
+              ],
+
+            ),
+
+          );
+
+        },
 
       ),
 
-    );
+    ),
+
+  );
+
+}
 
   }
 
-}
