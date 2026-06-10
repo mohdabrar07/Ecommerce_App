@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/core/widgets/splash_screen.dart';
+import 'package:ecommerce_app/features/products/logic/cubit/product_cubit.dart';
 import 'package:ecommerce_app/features/auth/logic/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,19 +24,30 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return BlocProvider(
+   return MultiBlocProvider(
 
+  providers: [
+
+    BlocProvider(
       create: (_) => AuthCubit(),
+    ),
 
-      child: MaterialApp(
+    BlocProvider(
+      create: (_) => ProductCubit(),
+    ),
 
-        debugShowCheckedModeBanner: false,
+  ],
 
-        home: const SplashScreen(),
+  child: MaterialApp(
 
-      ),
+    debugShowCheckedModeBanner:
+        false,
 
-    );
+    home: const SplashScreen(),
+
+  ),
+
+);
 
   }
 

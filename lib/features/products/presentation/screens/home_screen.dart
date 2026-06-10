@@ -1,7 +1,8 @@
-import 'package:ecommerce_app/features/auth/logic/cubit/auth_cubit.dart';
-import 'package:ecommerce_app/features/auth/logic/cubit/auth_state.dart';
+import 'package:ecommerce_app/features/products/logic/cubit/product_cubit.dart';
+import 'package:ecommerce_app/features/products/logic/cubit/product_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'product_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -21,8 +22,9 @@ class _HomeScreenState
 
     super.initState();
 
-    context.read<AuthCubit>()
-        .getProfile();
+    context
+        .read<ProductCubit>()
+        .getProducts();
 
   }
 
@@ -32,14 +34,19 @@ class _HomeScreenState
     return Scaffold(
 
       appBar: AppBar(
-        title: const Text("Home"),
+        title: const Text(
+          "Products",
+        ),
       ),
 
-      body: BlocBuilder<AuthCubit, AuthState>(
+      body: BlocBuilder<
+          ProductCubit,
+          ProductState>(
 
         builder: (context, state) {
 
-          if(state is AuthLoading) {
+          if(state
+              is ProductLoading) {
 
             return const Center(
               child:
@@ -48,9 +55,8 @@ class _HomeScreenState
 
           }
 
-          if(state is ProfileLoaded) {
-
-            final user = state.user;
+          if(state
+              is ProductError) {
 
             return Center(
 
@@ -61,29 +67,28 @@ class _HomeScreenState
 
                 children: [
 
-                  CircleAvatar(
+                  Text(state.message),
 
-                    radius: 40,
+                  const SizedBox(
+                    height: 20,
+                  ),
 
-                    backgroundImage:
-                        NetworkImage(
-                      user.avatar,
+                  ElevatedButton(
+
+                    onPressed: () {
+
+                      context
+                          .read<
+                              ProductCubit>()
+                          .getProducts();
+
+                    },
+
+                    child: const Text(
+                      "Retry",
                     ),
 
                   ),
-
-                  const SizedBox(height: 20),
-
-                  Text(
-                    user.name,
-                    style: const TextStyle(
-                      fontSize: 24,
-                    ),
-                  ),
-
-                  Text(user.email),
-
-                  Text(user.role),
 
                 ],
 
@@ -93,10 +98,120 @@ class _HomeScreenState
 
           }
 
-          if(state is AuthError) {
+          if(state
+              is ProductLoaded) {
 
-            return Center(
-              child: Text(state.message),
+            final products =
+                state.products;
+
+            return GridView.builder(
+
+              padding:
+                  const EdgeInsets.all(10),
+
+              itemCount:
+                  products.length,
+
+              gridDelegate:
+                  const SliverGridDelegateWithFixedCrossAxisCount(
+
+                crossAxisCount: 2,
+
+                crossAxisSpacing: 10,
+
+                mainAxisSpacing: 10,
+
+                childAspectRatio: 0.65,
+
+              ),
+
+              itemBuilder:
+                  (context, index) {
+
+                final product =
+                    products[index];
+
+                return InkWell(
+
+  onTap: () {
+
+    Navigator.push(
+
+      context,
+
+      MaterialPageRoute(
+
+        builder: (_) => ProductDetailsScreen(
+          product: product,
+        ),
+
+      ),
+
+    );
+
+  },
+
+  child: Card(
+
+    child: Padding(
+
+      padding: const EdgeInsets.all(10),
+
+      child: Column(
+
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
+
+        children: [
+
+          Expanded(
+
+            child: Image.network(
+
+              product.images[0],
+
+              fit: BoxFit.cover,
+
+              width: double.infinity,
+
+            ),
+
+          ),
+
+          const SizedBox(height: 10),
+
+          Text(
+
+            product.title,
+
+            maxLines: 2,
+
+            overflow: TextOverflow.ellipsis,
+
+          ),
+
+          const SizedBox(height: 5),
+
+          Text(
+            "\$${product.price}",
+          ),
+
+          Text(
+            product.category.name,
+          ),
+
+        ],
+
+      ),
+
+    ),
+
+  ),
+
+);
+
+              },
+
             );
 
           }
