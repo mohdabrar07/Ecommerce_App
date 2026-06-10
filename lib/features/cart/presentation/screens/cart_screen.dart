@@ -16,11 +16,15 @@ class CartScreen extends StatelessWidget {
 
           if (state is CartLoaded) {
 
-            if (state.items.isEmpty) {
-              return const Center(child: Text("Cart is empty"));
-            }
+  if (state.items.isEmpty) {
+    return const Center(
+      child: Text(
+        "No cart items found",
+      ),
+    );
+  }
 
-            return Column(
+  return Column(
               children: [
 
                 Expanded(
@@ -30,33 +34,140 @@ class CartScreen extends StatelessWidget {
                       final item = state.items[index];
 
                       return ListTile(
-                        leading: Image.network(item.image),
-                        title: Text(item.title),
-                        subtitle: Text("₹${item.price}"),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              onPressed: () =>
-                                  context.read<CartCubit>().decrease(item.id),
-                              icon: const Icon(Icons.remove),
-                            ),
-                            Text("${item.quantity}"),
-                            IconButton(
-                              onPressed: () =>
-                                  context.read<CartCubit>().increase(item.id),
-                              icon: const Icon(Icons.add),
-                            ),
-                          ],
-                        ),
-                      );
+  leading: Image.network(
+    item.image,
+    width: 50,
+    height: 50,
+  ),
+
+  title: Text(item.title),
+
+  subtitle: Column(
+    crossAxisAlignment:
+        CrossAxisAlignment.start,
+    children: [
+
+      Text("₹${item.price}"),
+
+      Text(
+        "Total: ₹${item.totalPrice}",
+      ),
+
+    ],
+  ),
+
+  trailing: Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+
+      IconButton(
+        onPressed: () =>
+            context.read<CartCubit>()
+                .decrease(item.id),
+        icon: const Icon(Icons.remove),
+      ),
+
+      Text("${item.quantity}"),
+
+      IconButton(
+        onPressed: () =>
+            context.read<CartCubit>()
+                .increase(item.id),
+        icon: const Icon(Icons.add),
+      ),
+
+      IconButton(
+        onPressed: () =>
+            context.read<CartCubit>()
+                .remove(item.id),
+        icon: const Icon(
+          Icons.delete,
+        ),
+      ),
+
+    ],
+  ),
+);
                     },
                   ),
                 ),
 
-                Text("Subtotal: ${state.subtotal}"),
-                Text("VAT (5%): ${state.vat}"),
-                Text("Total: ${state.total}"),
+               Padding(
+  padding: const EdgeInsets.all(16),
+
+  child: Column(
+
+    children: [
+
+      Row(
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween,
+        children: [
+          const Text("Subtotal"),
+          Text("₹${state.subtotal}"),
+        ],
+      ),
+
+      Row(
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween,
+        children: [
+          const Text("VAT (5%)"),
+          Text("₹${state.vat}"),
+        ],
+      ),
+
+      Row(
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween,
+        children: const [
+          Text("Delivery"),
+          Text("₹50"),
+        ],
+      ),
+
+      const Divider(),
+
+      Row(
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            "Grand Total",
+            style: TextStyle(
+              fontWeight:
+                  FontWeight.bold,
+            ),
+          ),
+          Text(
+            "₹${state.total}",
+          ),
+        ],
+      ),
+
+      const SizedBox(height: 20),
+
+      SizedBox(
+        width: double.infinity,
+
+        child: ElevatedButton(
+
+          onPressed: () {
+
+          },
+
+          child: const Text(
+            "Proceed To Checkout",
+          ),
+
+        ),
+      ),
+
+    ],
+
+  ),
+
+),
 
                 const SizedBox(height: 10),
               ],

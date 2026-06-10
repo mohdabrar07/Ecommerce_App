@@ -5,6 +5,8 @@ import 'package:ecommerce_app/features/auth/logic/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:ecommerce_app/features/wishlist/logic/cubit/wishlist_cubit.dart';
+
 
 void main() async {
 
@@ -13,6 +15,7 @@ void main() async {
   await Hive.initFlutter();
  await Hive.openBox('appBox');
   await Hive.openBox('cartBox');
+  await Hive.openBox('wishlistBox');
   runApp(
     const MyApp(),
   );
@@ -39,6 +42,9 @@ class MyApp extends StatelessWidget {
     ),
   BlocProvider(
   create: (_) => CartCubit(),
+),
+BlocProvider(
+  create: (_) => WishlistCubit(),
 ),
   ],
 
