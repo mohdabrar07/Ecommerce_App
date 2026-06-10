@@ -3,6 +3,7 @@ import 'package:ecommerce_app/features/products/logic/cubit/product_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'product_details_screen.dart';
+import 'package:ecommerce_app/features/cart/presentation/screens/cart_screen.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -34,10 +35,27 @@ class _HomeScreenState
     return Scaffold(
 
       appBar: AppBar(
-        title: const Text(
-          "Products",
-        ),
-      ),
+  title: const Text("Products"),
+
+  actions: [
+
+    IconButton(
+      icon: const Icon(Icons.shopping_cart),
+
+      onPressed: () {
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const CartScreen(),
+          ),
+        );
+
+      },
+    ),
+
+  ],
+),
 
       body: BlocBuilder<
           ProductCubit,

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../data/models/product_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ecommerce_app/features/cart/data/models/cart_item_model.dart';
+import 'package:ecommerce_app/features/cart/logic/cubit/cart_cubit.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final ProductModel product;
@@ -7,6 +10,7 @@ class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({
     super.key,
     required this.product,
+    
   });
 
   @override
@@ -107,14 +111,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               width: double.infinity,
 
               child: ElevatedButton(
+  onPressed: () {
 
-                onPressed: () {},
+    context.read<CartCubit>().addToCart(
+      CartItemModel(
+        id: widget.product.id,
+        title: widget.product.title,
+        image: widget.product.images.first,
+        price: widget.product.price.toDouble(),
+      ),
+    );
 
-                child: const Text(
-                  "Add To Cart",
-                ),
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Added to cart"),
+      ),
+    );
 
-              ),
+  },
+  child: const Text("Add To Cart"),
+),
 
             ),
 
