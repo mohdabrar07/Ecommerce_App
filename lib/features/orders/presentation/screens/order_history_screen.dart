@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'order_details_screen.dart';
 import '../../logic/cubit/order_cubit.dart';
 import '../../logic/cubit/order_state.dart';
 
@@ -35,16 +35,29 @@ class OrderHistoryScreen extends StatelessWidget {
                     state.orders[index];
 
                 return ListTile(
-                  title: Text(
-                    order.orderId,
-                  ),
-                  subtitle: Text(
-                    order.date,
-                  ),
-                  trailing: Text(
-                    "₹${order.totalAmount}",
-                  ),
-                );
+  title: Text(order.orderId),
+
+  subtitle: Text(order.date),
+
+  trailing: Text(
+    "₹${order.totalAmount}",
+  ),
+
+  onTap: () {
+
+    Navigator.push(
+      context,
+
+      MaterialPageRoute(
+        builder: (_) =>
+            OrderDetailsScreen(
+              order: order,
+            ),
+      ),
+    );
+
+  },
+);
               },
             );
           }
