@@ -5,48 +5,45 @@ import '../../data/models/address_model.dart';
 import 'address_state.dart';
 
 class AddressCubit extends Cubit<AddressState> {
-  AddressCubit() : super(AddressInitial());
+
+  AddressCubit() : super(AddressInitial()) {
+    loadAddresses();
+  }
 
   final box = Hive.box('addressBox');
 
   void loadAddresses() {
-    final data = box.values.toList();
+
     final addresses =
-        data.map((e) => AddressModel.fromMap(Map.from(e))).toList();
+        box.values
+            .map(
+              (e) => AddressModel.fromMap(
+                Map.from(e),
+              ),
+            )
+            .toList();
 
-    emit(AddressLoaded(addresses));
+    emit(
+      AddressLoaded(addresses),
+    );
   }
 
-  void addAddress(AddressModel address) {
-    final current = box.values.toList();
-    current.add(address.toMap());
+  void addAddress(
+    AddressModel address,
+  ) {
 
-    box.clear();
-    box.addAll(current);
+    box.add(
+      address.toMap(),
+    );
 
     loadAddresses();
   }
 
-  void deleteAddress(String id) {
-    final current = box.values.toList();
+  void deleteAddress(
+    int index,
+  ) {
 
-    current.removeWhere((e) => e["id"] == id);
-
-    box.clear();
-    box.addAll(current);
-
-    loadAddresses();
-  }
-
-  void setDefault(String id) {
-    final current = box.values.toList();
-
-    for (var item in current) {
-      item["isDefault"] = item["id"] == id;
-    }
-
-    box.clear();
-    box.addAll(current);
+    box.deleteAt(index);
 
     loadAddresses();
   }

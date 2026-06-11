@@ -1,5 +1,4 @@
 class AddressModel {
-  final String id;
   final String fullName;
   final String mobile;
   final String emirate;
@@ -7,10 +6,8 @@ class AddressModel {
   final String building;
   final String flat;
   final String landmark;
-  bool isDefault;
 
   AddressModel({
-    required this.id,
     required this.fullName,
     required this.mobile,
     required this.emirate,
@@ -18,12 +15,10 @@ class AddressModel {
     required this.building,
     required this.flat,
     required this.landmark,
-    this.isDefault = false,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String,dynamic> toMap() {
     return {
-      "id": id,
       "fullName": fullName,
       "mobile": mobile,
       "emirate": emirate,
@@ -31,13 +26,13 @@ class AddressModel {
       "building": building,
       "flat": flat,
       "landmark": landmark,
-      "isDefault": isDefault,
     };
   }
 
-  factory AddressModel.fromMap(Map<String, dynamic> map) {
+  factory AddressModel.fromMap(
+    Map<dynamic,dynamic> map,
+  ) {
     return AddressModel(
-      id: map["id"],
       fullName: map["fullName"],
       mobile: map["mobile"],
       emirate: map["emirate"],
@@ -45,7 +40,6 @@ class AddressModel {
       building: map["building"],
       flat: map["flat"],
       landmark: map["landmark"],
-      isDefault: map["isDefault"] ?? false,
     );
   }
 }
